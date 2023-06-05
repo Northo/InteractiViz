@@ -7,13 +7,16 @@
     <title>Vite App</title>
   </head>
   <body>
-    <div id="app"></div>
     <script type="module" src="/main.js"></script>
-    <p>Number of selected: <span id="num_selected"></span></p>
+    <div id="content" class="flex">
+      <div id="createForm" class="basis-1/7 flex-none mx-4 w-60 border-gray-600 border px-6 py-2 rounded"></div>
 
-    <div id="graph1" class="flex flex-wrap gap-6">
-
-      <div id="stats"></div>
+      <div>
+        <p>Number of selected: <span id="num_selected"></span></p>
+        <div id="graph1" class="flex flex-wrap gap-6">
+          <div id="stats"></div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

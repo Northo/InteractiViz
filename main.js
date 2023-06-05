@@ -73,6 +73,7 @@ function mapIntToColor(number) {
 
 function newGraph(x, y, z) {
   const newDiv = document.createElement('div');
+  graphs.push(newDiv);
   graphDivRoot.insertBefore(newDiv, graphDivRoot.firstChild);  // Prepend
   Plotly.newPlot(newDiv, [{
     x: x,
@@ -104,5 +105,39 @@ function newGraph(x, y, z) {
   return newDiv;
 }
 
-graphs.push(newGraph(data.age, data.year, data.risk));
-graphs.push(newGraph(data.age, data.id, data.risk));
+function handleSubmit(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  console.log(formData);
+  newGraph(
+    data[formData.get('x')],
+    data[formData.get('y')],
+    data[formData.get('z')],
+    );
+}
+const createFormDiv = document.getElementById('createForm');
+const form = document.createElement('form');
+createFormDiv.appendChild(form);
+
+function renderOptions(data) {
+  let options = '';
+  for (let key in data) {
+    if (data.hasOwnProperty(key)) {
+      options += `<option value="${key}">${key}</option>`;
+    }
+  }
+  return options;
+}
+
+function renderSelect(data, name) {
+  return `
+  <label for="${name}" class="mb-2 text-sm font-medium text-gray-900 dark:text-white">${name.toUpperCase()}</label>
+  <select name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">${renderOptions(data)}</select>
+  `;
+}
+
+form.innerHTML = `
+  ${["x", "y", "z"].map(x => renderSelect(data, x)).join('')}
+  <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Create</button>
+  `;
+form.addEventListener('submit', handleSubmit);
