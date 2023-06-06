@@ -56,21 +56,6 @@ Plotly.newPlot(statsDiv, [{
 
 let graphs = [];
 
-function mapIntToColor(number) {
-  switch (number) {
-    case 1:
-      return "red";
-    case 2:
-      return "blue";
-    case 3:
-      return "green";
-    case 4:
-      return "yellow";
-    default:
-      return "unknown";
-  }
-}
-
 function newGraph(x, y, z) {
   const newDiv = document.createElement('div');
   graphs.push(newDiv);
@@ -81,8 +66,7 @@ function newGraph(x, y, z) {
     type: 'scatter',
     mode: 'markers',
     marker: {
-      symbol: x.map(x => x > 40 ? 'circle' : 'square'),
-      color: z.map(x => mapIntToColor(x)),
+      color: z,
     }
   }], {
     margin: { t: 0 }
