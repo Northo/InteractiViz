@@ -68,7 +68,8 @@ function newGraph(x, y, z) {
     mode: 'markers',
     marker: {
       color: z,
-    }
+    },
+    text: z
   }], {
     margin: { t: 0 }
   });
