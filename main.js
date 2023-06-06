@@ -1,5 +1,6 @@
 import './style.css'
 import Plotly from 'plotly.js-dist'
+import Papa from 'papaparse'
 
 const graphDivRoot = document.querySelector('#graph1');
 
@@ -45,7 +46,7 @@ function getRandomFloat(min, max) {
 }
 
 const N = 500;
-const data = generateRandomObjects(N);
+let data;
 
 const statsDiv = document.getElementById('stats');
 Plotly.newPlot(statsDiv, [{
@@ -120,8 +121,31 @@ function renderSelect(data, name) {
   `;
 }
 
-form.innerHTML = `
-  ${["x", "y", "z"].map(x => renderSelect(data, x)).join('')}
-  <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Create</button>
-  `;
-form.addEventListener('submit', handleSubmit);
+
+
+document.getElementById('csvFile').addEventListener('change', event => {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function(event) {
+    const results = Papa.parse(event.target.result, {header: true});
+    data = results.data.reduce((acc, obj) => {
+      Object.keys(obj).forEach(key => {
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(obj[key]);
+      });
+      return acc;
+    }, {});
+    console.log(data);
+    form.innerHTML = `
+      ${["x", "y", "z"].map(x => renderSelect(data, x)).join('')}
+      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Create</button>
+      `;
+    form.addEventListener('submit', handleSubmit);
+    // 'results' contains an array of objects representing each row in the CSV file
+  };
+
+  reader.readAsText(file);
+});
