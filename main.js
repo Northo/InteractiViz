@@ -73,6 +73,14 @@ function newGraph(x, y, z) {
   }], {
     margin: { t: 0 }
   });
+
+  const exitButton = document.createElement('div');
+  exitButton.addEventListener('click', () => {newDiv.remove(); graphs = graphs.filter(graph => graph !== newDiv)});
+  exitButton.innerText = "X";
+  exitButton.classList = "absolute top-0 right-0 bg-red-500 rounded-full w-6 h-6 text-center text-white font-bold cursor-pointer hover:bg-red-600 hover:scale-110 transition-all"
+  newDiv.appendChild(exitButton);
+
+  newDiv.classList.add("rounded", "border-8", "border-slate-600", "relative");
   const selectionSpan = document.getElementById("num_selected");
   function handleSelection(eventData) {
     var points = eventData.points.map(point => point.pointIndex);
@@ -87,7 +95,6 @@ function newGraph(x, y, z) {
   newDiv.on('plotly_selecting', handleSelection);
   newDiv.on('plotly_selected', handleSelection);
 
-  newDiv.classList.add("rounded", "border-4", "border-slate-600");
   return newDiv;
 }
 
